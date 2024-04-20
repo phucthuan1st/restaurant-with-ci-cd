@@ -2,6 +2,7 @@ name: Deploy Node App to EC2 Server with Docker Registry
 on:
   push:
     branches:
+      - master
       - main
 
 jobs:
