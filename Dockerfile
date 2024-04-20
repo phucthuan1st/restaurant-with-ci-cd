@@ -15,4 +15,4 @@ COPY . .
 EXPOSE 3000
 
 # Set the entry point
-ENTRYPOINT [ "node", "app.js" ]
+ENTRYPOINT [ "npm", "start" ]
