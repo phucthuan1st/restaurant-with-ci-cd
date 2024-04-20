@@ -2,6 +2,7 @@ name: Deploy Node App to EC2 Server with Docker Registry
 on:
   push:
     branches:
+      - master
       - main
 
 jobs:
@@ -69,7 +70,8 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: ${{ secrets.SERVER_SSH_PORT }}
           script: |
-            docker pull ${{secrets.DOCKER_REGISTRY}}:latest
-            docker stop ${{secrets.DOCKER_REGISTRY}} || true
-            docker rm ${{secrets.DOCKER_REGISTRY}} || true
-            docker run -d --name ${{secrets.DOCKER_REGISTRY}} -p 80:80 ${{secrets.DOCKER_REGISTRY}}:latest
+            sudo docker pull ${{secrets.DOCKER_REGISTRY}}:latest
+            sudo docker stop server || true
+            sudo docker rm server || true
+            sudo docker run -d --name server -p 80:80 -p 3000:3000 ${{secrets.DOCKER_REGISTRY}}:latest
+            sudo docker ps -a
