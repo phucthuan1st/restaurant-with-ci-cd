@@ -22,7 +22,7 @@ jobs:
         run: npm install
 
       - name: Run tests
-        run: npm test --passWithNoTests
+        run: npm test
 
   infrastructure_check_phase:
     runs-on: ubuntu-latest
@@ -73,5 +73,5 @@ jobs:
             sudo docker pull ${{secrets.DOCKER_REGISTRY}}:latest
             sudo docker stop server || true
             sudo docker rm server || true
-            sudo docker run -d --name server --network host ${{secrets.DOCKER_REGISTRY}}:latest
+            sudo docker run -d --name server --network host --restart always ${{secrets.DOCKER_REGISTRY}}:latest
             sudo docker ps -a
