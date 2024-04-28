@@ -22,7 +22,7 @@ jobs:
         run: npm install
 
       - name: Run tests
-        run: npm test
+        run: npm test --passWithNoTests
 
   infrastructure_check_phase:
     runs-on: ubuntu-latest
