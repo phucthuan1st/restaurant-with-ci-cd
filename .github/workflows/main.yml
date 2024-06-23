@@ -36,8 +36,41 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: ${{ secrets.SERVER_SSH_PORT }}
           script: |
-            echo "Hello World"
-            sudo ufw status verbose | grep -q 'Status: inactive' && exit 1
+            echo "Starting infrastructure checks..."
+
+            echo "Check if UFW is active..."
+            if sudo ufw status | grep -q "Status: active"; then
+              echo "UFW is active"
+            else
+              echo "UFW is not active"
+              exit 1
+            fi
+
+            echo "Check if Nginx config is OK..."
+            if sudo nginx -t; then
+              echo "Nginx config is OK"
+            else
+              echo "Nginx config is not OK"
+              exit 1
+            fi
+
+            echo "Check if the domain restaurant.example.com is reachable..."
+            if ping -c 1 restaurant.example.com &> /dev/null; then
+              echo "Domain is reachable"
+            else
+              echo "Domain is not reachable"
+              exit 1
+            fi
+
+            echo "Check disk space usage..."
+            if df -h | grep '^/dev/' | awk '{ if ($5+0 > 80) exit 1 }'; then
+              echo "Disk space usage is within limits"
+            else
+              echo "Disk space usage is too high"
+              exit 1
+            fi
+
+            echo "All infrastructure checks passed successfully."
 
   image_build_and_push_phase:
     needs: [infrastructure_check_phase, test_phase]
