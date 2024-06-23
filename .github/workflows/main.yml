@@ -37,8 +37,10 @@ jobs:
           port: ${{ secrets.SERVER_SSH_PORT }}
           script: |
             echo "Hello World"
+            sudo ufw status verbose | grep -q 'Status: inactive' && exit 1
 
   image_build_and_push_phase:
+    needs: [infrastructure_check_phase, test_phase]
     runs-on: ubuntu-latest
     
     steps:
@@ -58,7 +60,7 @@ jobs:
           tags: ${{secrets.DOCKER_REGISTRY}}:latest
 
   image_pull_and_deploy_phase:
-    needs: [image_build_and_push_phase, infrastructure_check_phase]
+    needs: [image_build_and_push_phase]
     runs-on: ubuntu-latest
     
     steps:
