@@ -54,12 +54,12 @@ jobs:
               exit 1
             fi
 
-            echo "Check if the domain restaurant.example.com is reachable..."
-            if ping -c 1 restaurant.example.com &> /dev/null; then
-              echo "Domain is reachable"
+            echo "Check if the domain restaurant.nguyenphucthuan.id.vn is reachable and has SSL enabled..."
+            if curl -Is https://restaurant.nguyenphucthuan.id.vn | grep -q "200 OK"; then
+              echo "Domain is reachable and SSL is enabled"
             else
-              echo "Domain is not reachable"
-              
+              echo "Domain is not reachable or SSL is not enabled"
+              exit 1
             fi
 
             echo "Check disk space usage..."
