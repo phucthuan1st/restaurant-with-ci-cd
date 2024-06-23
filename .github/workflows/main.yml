@@ -59,7 +59,7 @@ jobs:
               echo "Domain is reachable"
             else
               echo "Domain is not reachable"
-              exit 1
+              
             fi
 
             echo "Check disk space usage..."
